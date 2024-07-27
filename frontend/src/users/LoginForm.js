@@ -15,20 +15,27 @@ function LoginForm() {
 
     const [errorMessage, setErrorMessage] = useState(null)
 
+    //This first part is handling the posting of the credentials with them being the email and pw
     async function handleSubmit(e) {
-        e.preventDefault()
         const response = await fetch(`http://localhost:5000/authentication/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentials)
-    })
+        })
 
-    const data = await response.json()
+        const data = await response.json()
 
-    console.log(data)
-}
+        //After waiting for the response it will either push to the home page or come back with an error
+        if (response.status === 200) {
+            setCurrentUser(data.user)
+            history.push(`/`)
+        } else {
+            setErrorMessage(data.message)
+        }
+    }
+
 
     return (
         <main>

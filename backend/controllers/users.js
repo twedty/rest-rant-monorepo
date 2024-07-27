@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 
 const { User } = db
 
+//This hashes the password (I don't think we have a salt in here to increase security)
 router.post('/', async (req, res) => {
     let { password, ...rest } = req.body;
     const user = await User.create({ 
