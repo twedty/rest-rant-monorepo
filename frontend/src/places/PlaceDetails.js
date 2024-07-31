@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router"
 import CommentCard from './CommentCard'
 import NewCommentForm from "./NewCommentForm";
+import { CurrentUser } from "../contexts/CurrentUser";
 
 function PlaceDetails() {
 
@@ -99,11 +100,28 @@ function PlaceDetails() {
 		)
 		comments = place.comments.map(comment => {
 			return (
-				<CommentCard key={comment.commentId} comment={comment} onDelete={() => deleteComment(comment)} />
+				<CommentCard 
+					key={comment.commentId}
+					comment={comment}
+					onDelete={() => deleteComment(comment)} 
+				/>
 			)
 		})
 	}
 
+	let placeActions = null
+	if (CurrentUser?.role === 'admin') {
+		placeActions = (
+			<>
+				<a className="btn btn-warning" onClick={editPlace}>
+					Edit
+				</a>
+				<button type='submit' className="btn btn-danger" onClick={deletePlace}>
+					Delete
+				</button>
+			</>
+		)
+	}
 
 	return (
 		<main>
@@ -131,6 +149,7 @@ function PlaceDetails() {
 						Serving {place.cuisines}.
 					</h4>
 					<br />
+					{placeActions}
 					<a className="btn btn-warning" onClick={editPlace}>
 						Edit
 					</a>{` `}
